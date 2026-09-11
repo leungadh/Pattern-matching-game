@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+._*
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Python (tools/*.py)
+__pycache__/
+*.pyc
+
+# Local previews / exports (not part of the game)
+Claude outputs/
+*.zip
