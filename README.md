@@ -62,7 +62,9 @@ answers: [
 ]
 ```
 
-**New or extra tile icons:** put them in `icons/` and add their paths to `icons: [...]`.
+**Tile icon sets:** there are two ready-made sets, `bible` (in `icons/bible/`) and `classic`. Switch between them by changing one word in `config.js`: `icons: ICON_SETS.bible` or `icons: ICON_SETS.classic`.
+
+**New or extra tile icons:** put them in `icons/` and add their paths to a set in `ICON_SETS`.
 If there are more than 18 icons, each game picks 18 at random.
 
 To change the board size, set `gridSize` (4 = 16 tiles, 6 = 36 tiles, 8 = 64 tiles). You need at least (gridSize²)/2 icons.
@@ -79,6 +81,8 @@ icons/              18 tile pictures (SVG)
 answers/            hidden answer pictures
 tools/make_icons.py re-generates the built-in icons (optional, needs Python)
 tools/make_answers.py re-generates the built-in answer pictures (optional, needs Python)
+tools/make_bible.py   re-generates the Bible-story answer pictures (optional, needs Python)
+tools/make_bible_icons.py re-generates the Bible tile icons in icons/bible/ (optional, needs Python)
 ```
 
 File names are case-sensitive on the web, so `Lighthouse.JPG` and `lighthouse.jpg` are different files. Keep names lowercase with no spaces to be safe.

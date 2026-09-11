@@ -7,15 +7,9 @@
  *
  * Paths are relative to index.html. PNG, JPG, WEBP and SVG all work.
  */
-window.GAME_CONFIG = {
-  title: "Pattern Match",
-
-  // 6 x 6 = 36 tiles = 18 pairs. Must give an even number of tiles.
-  gridSize: 6,
-
-  // Tile pictures. Needs at least (gridSize*gridSize)/2 entries.
-  // If you list more, each game picks a random subset.
-  icons: [
+// Tile picture sets. To switch, change the "icons:" line inside GAME_CONFIG.
+const ICON_SETS = {
+  classic: [
     "icons/01-apple.svg",   "icons/02-lemon.svg",     "icons/03-fish.svg",
     "icons/04-cat.svg",     "icons/05-snowflake.svg", "icons/06-tree.svg",
     "icons/07-flower.svg",  "icons/08-mushroom.svg",  "icons/09-rocket.svg",
@@ -23,6 +17,25 @@ window.GAME_CONFIG = {
     "icons/13-anchor.svg",  "icons/14-music.svg",     "icons/15-gift.svg",
     "icons/16-storm.svg",   "icons/17-butterfly.svg", "icons/18-icecream.svg"
   ],
+  bible: [
+    "icons/bible/01-dove.svg",     "icons/bible/02-ark.svg",           "icons/bible/03-rainbow.svg",
+    "icons/bible/04-tablets.svg",  "icons/bible/05-crown.svg",         "icons/bible/06-harp.svg",
+    "icons/bible/07-sling.svg",    "icons/bible/08-bread.svg",         "icons/bible/09-star.svg",
+    "icons/bible/10-lamb.svg",     "icons/bible/11-lion.svg",          "icons/bible/12-burning-bush.svg",
+    "icons/bible/13-oil-lamp.svg", "icons/bible/14-scroll.svg",        "icons/bible/15-grapes.svg",
+    "icons/bible/16-wheat.svg",    "icons/bible/17-cross.svg",         "icons/bible/18-big-fish.svg"
+  ]
+};
+
+window.GAME_CONFIG = {
+  title: "Pattern Match",
+
+  // 6 x 6 = 36 tiles = 18 pairs. Must give an even number of tiles.
+  gridSize: 6,
+
+  // Tile pictures: choose a set from ICON_SETS above — "bible" or "classic".
+  // Needs at least (gridSize*gridSize)/2 pictures. If a set has more, each game picks a random subset.
+  icons: ICON_SETS.bible,
 
   // Hidden answer pictures. One is chosen at random each game (never the same twice in a row).
   // "title" is what the host sees when peeking and what is shown on the final reveal.
@@ -39,7 +52,19 @@ window.GAME_CONFIG = {
     { image: "answers/octopus.svg",         title: "Octopus" },
     { image: "answers/pyramids.svg",        title: "Pyramids" },
     { image: "answers/birthday-cake.svg",   title: "Birthday cake" },
-    { image: "answers/ferris-wheel.svg",    title: "Ferris wheel" }
+    { image: "answers/ferris-wheel.svg",    title: "Ferris wheel" },
+
+    // Bible stories
+    { image: "answers/noahs-ark.svg",         title: "Noah's Ark" },
+    { image: "answers/david-and-goliath.svg", title: "David and Goliath" },
+    { image: "answers/moses-red-sea.svg",     title: "Moses parts the Red Sea" },
+    { image: "answers/jonah-big-fish.svg",    title: "Jonah and the big fish" },
+    { image: "answers/daniel-lions-den.svg",  title: "Daniel in the lions' den" },
+    { image: "answers/adam-and-eve.svg",      title: "Adam and Eve" },
+    { image: "answers/baby-jesus-manger.svg", title: "Baby Jesus in the manger" },
+    { image: "answers/josephs-coat.svg",      title: "Joseph's coat of many colours" },
+    { image: "answers/samson.svg",            title: "Samson" },
+    { image: "answers/zacchaeus.svg",         title: "Zacchaeus in the tree" }
   ],
 
   // Timing (milliseconds)
