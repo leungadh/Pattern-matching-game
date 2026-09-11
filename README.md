@@ -4,6 +4,11 @@ A host-run memory game for a big screen. 36 numbered tiles hide 18 pairs of pict
 Every matched pair disappears and uncovers part of a hidden answer image under the board.
 The audience shouts out what they think the picture is, and the host decides if they're right.
 
+<p align="center">
+  <img src="icons/Hero.png" width="600"
+       alt="Pattern Match mid-game: 7 of 18 pairs found, with cleared tiles revealing part of a birthday-cake picture under the numbered board">
+</p>
+
 ## Run it (Windows or Mac)
 
 1. Copy the whole `Pattern-matching-game` folder to the PC (USB stick, OneDrive, zip file — any way works).
