@@ -53,12 +53,14 @@ The volume and the on/off defaults are in `config.js` (`sound`, `music`, `volume
 
 ## Add your own pictures
 
-**New answer image:** put it in `answers/` (a square JPG or PNG works best), then add one line in `config.js`:
+**Answer pictures:** the game uses the 10 Bible-story pictures in `answers/`. The other 12 pictures (lighthouse, castle, volcano and so on) are kept in `answers/backup/`. To use them again, change `answers: ANSWER_SETS.bible` to `answers: ANSWER_SETS.classic` in `config.js`.
+
+**New answer image:** put it in `answers/` (a square JPG or PNG works best), then add one line to the `bible` list in `ANSWER_SETS` in `config.js`:
 
 ```js
 answers: [
-  { image: "answers/lighthouse.svg",  title: "Lighthouse" },
-  { image: "answers/my-photo.jpg",    title: "Victoria Harbour" }   // ← new
+  { image: "answers/noahs-ark.svg",   title: "Noah's Ark" },
+  { image: "answers/my-photo.jpg",    title: "The Good Samaritan" }   // ← new
 ]
 ```
 
@@ -78,9 +80,10 @@ game.js             game rules (plain JavaScript, no libraries)
 sound.js            sound effects and background music (generated, no audio files)
 config.js           ← the only file you normally edit
 icons/              18 tile pictures (SVG)
-answers/            hidden answer pictures
+answers/            hidden answer pictures (Bible stories)
+answers/backup/     the earlier non-Bible pictures, not used in the game
 tools/make_icons.py re-generates the built-in icons (optional, needs Python)
-tools/make_answers.py re-generates the built-in answer pictures (optional, needs Python)
+tools/make_answers.py re-generates the non-Bible pictures into answers/backup/ (optional, needs Python)
 tools/make_bible.py   re-generates the Bible-story answer pictures (optional, needs Python)
 tools/make_bible_icons.py re-generates the Bible tile icons in icons/bible/ (optional, needs Python)
 ```

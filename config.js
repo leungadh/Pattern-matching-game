@@ -27,34 +27,10 @@ const ICON_SETS = {
   ]
 };
 
-window.GAME_CONFIG = {
-  title: "Pattern Match",
-
-  // 6 x 6 = 36 tiles = 18 pairs. Must give an even number of tiles.
-  gridSize: 6,
-
-  // Tile pictures: choose a set from ICON_SETS above — "bible" or "classic".
-  // Needs at least (gridSize*gridSize)/2 pictures. If a set has more, each game picks a random subset.
-  icons: ICON_SETS.bible,
-
-  // Hidden answer pictures. One is chosen at random each game (never the same twice in a row).
-  // "title" is what the host sees when peeking and what is shown on the final reveal.
-  // Square images look best (they are centre-cropped to fill the board).
-  answers: [
-    { image: "answers/lighthouse.svg",      title: "Lighthouse" },
-    { image: "answers/hot-air-balloon.svg", title: "Hot-air balloon" },
-    { image: "answers/castle.svg",          title: "Castle" },
-    { image: "answers/pirate-ship.svg",     title: "Pirate ship" },
-    { image: "answers/windmill.svg",        title: "Windmill" },
-    { image: "answers/snowman.svg",         title: "Snowman" },
-    { image: "answers/volcano.svg",         title: "Volcano" },
-    { image: "answers/steam-train.svg",     title: "Steam train" },
-    { image: "answers/octopus.svg",         title: "Octopus" },
-    { image: "answers/pyramids.svg",        title: "Pyramids" },
-    { image: "answers/birthday-cake.svg",   title: "Birthday cake" },
-    { image: "answers/ferris-wheel.svg",    title: "Ferris wheel" },
-
-    // Bible stories
+// Answer picture sets. Only the "bible" set is used; the others were moved to answers/backup/.
+// To bring them back, change the "answers:" line inside GAME_CONFIG to ANSWER_SETS.classic.
+const ANSWER_SETS = {
+  bible: [
     { image: "answers/noahs-ark.svg",         title: "Noah's Ark" },
     { image: "answers/david-and-goliath.svg", title: "David and Goliath" },
     { image: "answers/moses-red-sea.svg",     title: "Moses parts the Red Sea" },
@@ -66,6 +42,37 @@ window.GAME_CONFIG = {
     { image: "answers/samson.svg",            title: "Samson" },
     { image: "answers/zacchaeus.svg",         title: "Zacchaeus in the tree" }
   ],
+  classic: [
+    { image: "answers/backup/lighthouse.svg",      title: "Lighthouse" },
+    { image: "answers/backup/hot-air-balloon.svg", title: "Hot-air balloon" },
+    { image: "answers/backup/castle.svg",          title: "Castle" },
+    { image: "answers/backup/pirate-ship.svg",     title: "Pirate ship" },
+    { image: "answers/backup/windmill.svg",        title: "Windmill" },
+    { image: "answers/backup/snowman.svg",         title: "Snowman" },
+    { image: "answers/backup/volcano.svg",         title: "Volcano" },
+    { image: "answers/backup/steam-train.svg",     title: "Steam train" },
+    { image: "answers/backup/octopus.svg",         title: "Octopus" },
+    { image: "answers/backup/pyramids.svg",        title: "Pyramids" },
+    { image: "answers/backup/birthday-cake.svg",   title: "Birthday cake" },
+    { image: "answers/backup/ferris-wheel.svg",    title: "Ferris wheel" }
+  ]
+};
+
+window.GAME_CONFIG = {
+  title: "Pattern Match",
+
+  // 6 x 6 = 36 tiles = 18 pairs. Must give an even number of tiles.
+  gridSize: 6,
+
+  // Tile pictures: choose a set from ICON_SETS above — "bible" or "classic".
+  // Needs at least (gridSize*gridSize)/2 pictures. If a set has more, each game picks a random subset.
+  icons: ICON_SETS.bible,
+
+  // Hidden answer pictures: choose a set from ANSWER_SETS above.
+  // One is chosen at random each game (never the same twice in a row).
+  // "title" is what the host sees when peeking and what is shown on the final reveal.
+  // Square images look best (they are centre-cropped to fill the board).
+  answers: ANSWER_SETS.bible,
 
   // Timing (milliseconds)
   flipBackDelayMs: 1200,   // how long a wrong pair stays visible

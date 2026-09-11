@@ -1,10 +1,10 @@
-"""Generates the extra answer pictures (800x800 SVG) into ../answers/.
+"""Generates the non-Bible answer pictures (800x800 SVG) into ../answers/backup/ (not used by the game).
 Each scene is drawn so the subject spreads across the whole board, which keeps early reveals fair.
 Run:  python3 tools/make_answers.py
 """
 import math, os, random
 
-OUT = os.path.join(os.path.dirname(__file__), "..", "answers")
+OUT = os.path.join(os.path.dirname(__file__), "..", "answers", "backup")
 os.makedirs(OUT, exist_ok=True)
 R = random.Random(7)  # fixed seed -> same pictures every run
 
