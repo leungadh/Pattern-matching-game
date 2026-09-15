@@ -1,10 +1,10 @@
-"""Generates 18 Bible-themed tile icons (100x100 SVG) into ../icons/bible/.
+"""Generates 18 Bible-themed tile icons (100x100 SVG) into ../bible/icons/.
 Each icon has its own main colour and shape so pairs are easy to spot from across a room.
 Run:  python3 tools/make_bible_icons.py
 """
 import math, os
 
-OUT = os.path.join(os.path.dirname(__file__), "..", "icons", "bible")
+OUT = os.path.join(os.path.dirname(__file__), "..", "bible", "icons")
 os.makedirs(OUT, exist_ok=True)
 
 

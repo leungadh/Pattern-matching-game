@@ -1,10 +1,10 @@
-"""Generates Bible-story answer pictures (800x800 SVG) into ../answers/.
+"""Generates Bible-story answer pictures (800x800 SVG) into ../bible/answers/.
 Friendly flat style; each scene uses the story's best-known clue so it is easy to guess.
 Run:  python3 tools/make_bible.py
 """
 import math, os, random
 
-OUT = os.path.join(os.path.dirname(__file__), "..", "answers")
+OUT = os.path.join(os.path.dirname(__file__), "..", "bible", "answers")
 os.makedirs(OUT, exist_ok=True)
 R = random.Random(11)
 

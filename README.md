@@ -5,14 +5,24 @@ Every matched pair disappears and uncovers part of a hidden answer image under t
 The audience shouts out what they think the picture is, and the host decides if they're right.
 
 <p align="center">
-  <img src="icons/Hero.png" width="600"
+  <img src="assets/hero.png" width="600"
        alt="Pattern Match mid-game: 7 of 18 pairs found, with cleared tiles revealing part of a birthday-cake picture under the numbered board">
 </p>
+
+## Two editions
+
+| Edition | Folder | Contents |
+|---|---|---|
+| **Classic** | `classic/` | Everyday icons, 12 answer pictures (lighthouse, castle, volcano…) |
+| **Bible** | `bible/` | Bible symbols, 10 story pictures (Noah's Ark, the Red Sea, Daniel…) |
+
+Both run on the same engine in `engine/`, so a fix made once applies to both.
 
 ## Run it (Windows or Mac)
 
 1. Copy the whole `Pattern-matching-game` folder to the PC (USB stick, OneDrive, zip file — any way works).
-2. Double-click `index.html`. It opens in Edge or Chrome. You don't need to install anything, and it works offline.
+2. Double-click `index.html` at the top level and pick an edition — or go straight to `classic/index.html` or `bible/index.html`.
+   It opens in Edge or Chrome. You don't need to install anything, and it works offline.
 3. Press **F** for full screen.
 
 ## How to play
@@ -49,43 +59,58 @@ All sounds are made by the browser, so there are no audio files to copy.
 - **Pressing C or R once:** a drum roll while you confirm. Then a fanfare with a cymbal crash for a correct guess, or a "wah-wah-wahhh" if nobody got it.
 - **New game:** a card-shuffle sound.
 
-The volume and the on/off defaults are in `config.js` (`sound`, `music`, `volume`).
+The volume and the on/off defaults are in each edition's `config.js` (`sound`, `music`, `volume`).
 
 ## Add your own pictures
 
-**Answer pictures:** the game uses the 10 Bible-story pictures in `answers/`. The other 12 pictures (lighthouse, castle, volcano and so on) are kept in `answers/backup/`. To use them again, change `answers: ANSWER_SETS.bible` to `answers: ANSWER_SETS.classic` in `config.js`.
+Each edition is self-contained: `<edition>/config.js`, `<edition>/icons/`, `<edition>/answers/`.
+Edit the edition you want to change; the other one is untouched.
 
-**New answer image:** put it in `answers/` (a square JPG or PNG works best), then add one line to the `bible` list in `ANSWER_SETS` in `config.js`:
+**New answer image:** put a square JPG, PNG or SVG in `bible/answers/`, then add one line to `ANSWERS` in `bible/config.js`:
 
 ```js
-answers: [
-  { image: "answers/noahs-ark.svg",   title: "Noah's Ark" },
-  { image: "answers/my-photo.jpg",    title: "The Good Samaritan" }   // ← new
-]
+const ANSWERS = [
+  { image: "answers/noahs-ark.svg",  title: "Noah's Ark" },
+  { image: "answers/my-photo.jpg",   title: "The Good Samaritan" }   // ← new
+];
 ```
 
-**Tile icon sets:** there are two ready-made sets, `bible` (in `icons/bible/`) and `classic`. Switch between them by changing one word in `config.js`: `icons: ICON_SETS.bible` or `icons: ICON_SETS.classic`.
+**New tile icons:** put them in `<edition>/icons/` and add their paths to `ICONS`.
+If there are more than 18, each game picks 18 at random.
 
-**New or extra tile icons:** put them in `icons/` and add their paths to a set in `ICON_SETS`.
-If there are more than 18 icons, each game picks 18 at random.
+**Board size:** set `gridSize` (4 = 16 tiles, 6 = 36 tiles, 8 = 64 tiles). You need at least (gridSize²)/2 icons.
 
-To change the board size, set `gridSize` (4 = 16 tiles, 6 = 36 tiles, 8 = 64 tiles). You need at least (gridSize²)/2 icons.
+**Chinese titles:** put the Chinese text in the `title` field, never in the file name.
+File names must stay lowercase ASCII — Chinese file names break on Windows and in URLs.
 
 ## Files
 
 ```
-index.html          page layout
-style.css           look and animations
-game.js             game rules (plain JavaScript, no libraries)
-sound.js            sound effects and background music (generated, no audio files)
-config.js           ← the only file you normally edit
-icons/              18 tile pictures (SVG)
-answers/            hidden answer pictures (Bible stories)
-answers/backup/     the earlier non-Bible pictures, not used in the game
-tools/make_icons.py re-generates the built-in icons (optional, needs Python)
-tools/make_answers.py re-generates the non-Bible pictures into answers/backup/ (optional, needs Python)
-tools/make_bible.py   re-generates the Bible-story answer pictures (optional, needs Python)
-tools/make_bible_icons.py re-generates the Bible tile icons in icons/bible/ (optional, needs Python)
+index.html            landing page — pick an edition
+.nojekyll             tells GitHub Pages to serve the files as-is
+
+engine/               shared by both editions
+  style.css           look and animations
+  game.js             game rules (plain JavaScript, no libraries)
+  sound.js            sound effects and background music (generated, no audio files)
+
+classic/              Classic edition
+  index.html
+  config.js           ← the only file you normally edit
+  icons/              18 tile pictures (SVG)
+  answers/            12 hidden answer pictures
+
+bible/                Bible edition — same shape
+  index.html
+  config.js
+  icons/
+  answers/
+
+assets/hero.png       screenshot used by this README
+tools/make_icons.py         re-generates classic/icons/        (optional, needs Python)
+tools/make_answers.py       re-generates classic/answers/      (optional, needs Python)
+tools/make_bible_icons.py   re-generates bible/icons/          (optional, needs Python)
+tools/make_bible.py         re-generates bible/answers/        (optional, needs Python)
 ```
 
 File names are case-sensitive on the web, so `Lighthouse.JPG` and `lighthouse.jpg` are different files. Keep names lowercase with no spaces to be safe.

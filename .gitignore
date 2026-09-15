@@ -18,3 +18,7 @@ __pycache__/
 # Local previews / exports (not part of the game)
 Claude outputs/
 *.zip
+
+# Node (tools/smoke.js only)
+node_modules/
+package-lock.json

@@ -1,10 +1,10 @@
-"""Generates the 18 original flat SVG tile icons into ../icons/.
+"""Generates the 18 original flat SVG tile icons into ../classic/icons/.
 Each icon uses a 100x100 viewBox with a transparent background (the tile supplies the card colour).
 Run:  python3 tools/make_icons.py
 """
 import math, os
 
-OUT = os.path.join(os.path.dirname(__file__), "..", "icons")
+OUT = os.path.join(os.path.dirname(__file__), "..", "classic", "icons")
 os.makedirs(OUT, exist_ok=True)
 
 def petals(cx, cy, r, pr, n, fill):

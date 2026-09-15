@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pattern Match</title>
+  <link rel="stylesheet" href="../engine/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1 id="title">Pattern Match</h1>
+    <div class="stats">
+      <span>Pairs <b id="pairs">0</b>/<b id="totalPairs">18</b></span>
+      <span>Turns <b id="turns">0</b></span>
+      <span id="tileEntry" class="tile-entry" hidden></span>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div id="board" class="board">
+      <div id="answerLayer" class="answer-layer"></div>
+      <div id="grid" class="grid" role="grid" aria-label="Game board"></div>
+      <div id="banner" class="banner" hidden></div>
+    </div>
+  </main>
+
+  <footer class="toolbar">
+    <button id="btnNew"     data-action="new"><kbd>N</kbd> New game</button>
+    <button id="btnCorrect" data-action="correct" class="good"><kbd>C</kbd> Correct!</button>
+    <button id="btnReveal"  data-action="reveal"><kbd>R</kbd> Reveal answer</button>
+    <button id="btnPeek"    data-action="peek"><kbd>P</kbd> Host peek</button>
+    <button id="btnSound"   data-action="sound"><kbd>M</kbd> <span id="soundLabel">Sound on</span></button>
+    <button id="btnMusic"   data-action="music"><kbd>B</kbd> <span id="musicLabel">Music off</span></button>
+    <button id="btnFull"    data-action="fullscreen"><kbd>F</kbd> Full screen</button>
+    <span id="peek" class="peek" hidden></span>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="../engine/sound.js"></script>
+  <script src="../engine/game.js"></script>
+</body>
+</html>
