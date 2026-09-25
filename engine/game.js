@@ -11,7 +11,8 @@
 
   const DEFAULTS = {
     title: "Pattern Match", gridSize: 6, icons: [], pairs: [], answers: [],
-    flipBackDelayMs: 1200, clearDelayMs: 700, sound: true, music: false, volume: 0.8
+    flipBackDelayMs: 1200, clearDelayMs: 700, sound: true, music: false, volume: 0.8,
+    revealText: true     // false = end the round on the picture alone, no answer banner
   };
   // Every piece of text the engine writes on screen. An edition can override any of
   // them in config.js under `strings` (e.g. Chinese), so the engine stays language-free.
@@ -299,13 +300,14 @@
     setTimeout(() => {
       if (id !== state.gameId) return;
       snd.pauseMusic();
+      if (!cfg.revealText) el.banner.hidden = true;   // let the picture speak for itself
       if (correct) {
-        showBanner(tr("correct", { title }),
+        if (cfg.revealText) showBanner(tr("correct", { title }),
                    tr("correctSub", { pairs: state.pairs, total: state.totalPairs, turns: state.turns }));
         play("fanfare");
         confetti();
       } else {
-        showBanner(tr("reveal", { title }), tr("revealSub"));
+        if (cfg.revealText) showBanner(tr("reveal", { title }), tr("revealSub"));
         play("sadTrombone");
       }
     }, wait);

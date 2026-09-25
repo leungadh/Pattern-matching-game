@@ -80,6 +80,10 @@ window.GAME_CONFIG = {
   music: false,
   volume: 0.8,
 
+  // End of round shows only the uncovered picture — no "答對了！是「…」" banner.
+  // The title above is still what the host sees on peek (P).
+  revealText: false,
+
   // Everything the game writes on screen. {placeholders} are filled in by the engine.
   strings: {
     boardCleared: "全部配對完成！",
