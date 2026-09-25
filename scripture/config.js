@@ -43,19 +43,22 @@ const PAIRS = [
 ];
 // PAIRS:END
 
-// Hidden answer pictures. One is chosen at random each game (never the same twice in a row).
+// Hidden answer picture. With one entry, every game uses it.
 // "title" is shown to the host on peek (P) and on the final reveal.
 const ANSWERS = [
-  { image: "answers/noahs-ark.svg",         title: "挪亞方舟" },
-  { image: "answers/david-and-goliath.svg", title: "大衛與歌利亞" },
-  { image: "answers/moses-red-sea.svg",     title: "摩西過紅海" },
-  { image: "answers/jonah-big-fish.svg",    title: "約拿與大魚" },
-  { image: "answers/daniel-lions-den.svg",  title: "但以理在獅子坑" },
-  { image: "answers/adam-and-eve.svg",      title: "亞當和夏娃" },
-  { image: "answers/baby-jesus-manger.svg", title: "耶穌降生在馬槽" },
-  { image: "answers/josephs-coat.svg",      title: "約瑟的彩衣" },
-  { image: "answers/samson.svg",            title: "參孫" },
-  { image: "answers/zacchaeus.svg",         title: "撒該爬上桑樹" }
+  { image: "answers/doctor-and-horse.jpg", title: "（答案）" }
+
+  // Earlier story pictures — move a line back above to put it in the rotation again.
+  // { image: "answers/noahs-ark.svg",         title: "挪亞方舟" },
+  // { image: "answers/david-and-goliath.svg", title: "大衛與歌利亞" },
+  // { image: "answers/moses-red-sea.svg",     title: "摩西過紅海" },
+  // { image: "answers/jonah-big-fish.svg",    title: "約拿與大魚" },
+  // { image: "answers/daniel-lions-den.svg",  title: "但以理在獅子坑" },
+  // { image: "answers/adam-and-eve.svg",      title: "亞當和夏娃" },
+  // { image: "answers/baby-jesus-manger.svg", title: "耶穌降生在馬槽" },
+  // { image: "answers/josephs-coat.svg",      title: "約瑟的彩衣" },
+  // { image: "answers/samson.svg",            title: "參孫" },
+  // { image: "answers/zacchaeus.svg",         title: "撒該爬上桑樹" }
 ];
 
 window.GAME_CONFIG = {
