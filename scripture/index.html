@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>經文配對遊戲</title>
+  <link rel="stylesheet" href="../engine/style.css">
+  <style>
+    /* System CJK fonts only (no webfont), so it still works offline.
+       Traditional-Chinese fonts are listed first so 真/為/說 use HK/TW glyphs. */
+    body {
+      font-family: "Segoe UI", -apple-system, "PingFang TC", "PingFang HK",
+                   "Microsoft JhengHei", "Noto Sans CJK TC", "PingFang SC",
+                   "Microsoft YaHei", Arial, sans-serif;
+    }
+    :root { --ink: #2a1f14; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1 id="title">經文配對遊戲</h1>
+    <div class="stats">
+      <span>配對 <b id="pairs">0</b>/<b id="totalPairs">24</b></span>
+      <span>回合 <b id="turns">0</b></span>
+      <span id="tileEntry" class="tile-entry" hidden></span>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div id="board" class="board">
+      <div id="answerLayer" class="answer-layer"></div>
+      <div id="grid" class="grid" role="grid" aria-label="遊戲板"></div>
+      <div id="banner" class="banner" hidden></div>
+    </div>
+  </main>
+
+  <footer class="toolbar">
+    <button id="btnNew"     data-action="new"><kbd>N</kbd> 新遊戲</button>
+    <button id="btnCorrect" data-action="correct" class="good"><kbd>C</kbd> 答對了！</button>
+    <button id="btnReveal"  data-action="reveal"><kbd>R</kbd> 揭曉答案</button>
+    <button id="btnPeek"    data-action="peek"><kbd>P</kbd> 主持人偷看</button>
+    <button id="btnSound"   data-action="sound"><kbd>M</kbd> <span id="soundLabel">音效開</span></button>
+    <button id="btnMusic"   data-action="music"><kbd>B</kbd> <span id="musicLabel">音樂關</span></button>
+    <button id="btnFull"    data-action="fullscreen"><kbd>F</kbd> 全螢幕</button>
+    <span id="peek" class="peek" hidden></span>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="../engine/sound.js"></script>
+  <script src="../engine/game.js"></script>
+</body>
+</html>

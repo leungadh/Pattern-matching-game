@@ -128,6 +128,26 @@ body {
 }
 .back img { width: 80%; height: 80%; object-fit: contain; pointer-events: none; }
 
+/* text cards (config `pairs`): one short phrase, sized by game.js via --fs */
+.back.text {
+  padding: 4%;
+  color: var(--ink, #2a1f14);
+  font-family: var(--card-font, inherit);
+  font-weight: 800;
+  font-size: calc(var(--size) / var(--n) * var(--fs, .3));
+  line-height: 1.15;
+  text-align: center;
+  letter-spacing: .02em;
+}
+.back.text .txt { display: block; }
+
+/* the empty centre cell of an odd-sized board: never flips, just covers the answer */
+.tile-blank {
+  background: var(--cell);
+  transition: background-color .5s ease;
+}
+.board.done .tile-blank { background-color: transparent; }
+
 .tile.matched .back { box-shadow: inset 0 0 0 5px var(--accent); }
 .tile.miss .back   { box-shadow: inset 0 0 0 5px var(--danger); animation: shake .35s; }
 

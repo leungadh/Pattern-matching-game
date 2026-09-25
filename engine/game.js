@@ -10,10 +10,27 @@
   "use strict";
 
   const DEFAULTS = {
-    title: "Pattern Match", gridSize: 6, icons: [], answers: [],
+    title: "Pattern Match", gridSize: 6, icons: [], pairs: [], answers: [],
     flipBackDelayMs: 1200, clearDelayMs: 700, sound: true, music: false, volume: 0.8
   };
+  // Every piece of text the engine writes on screen. An edition can override any of
+  // them in config.js under `strings` (e.g. Chinese), so the engine stays language-free.
+  const STRINGS = {
+    boardCleared: "Board cleared!",
+    boardClearedSub: "What's the picture? Host: press C or R",
+    correct: "Correct! It's {title}",
+    correctSub: "Solved with {pairs} of {total} pairs found in {turns} turns",
+    reveal: "It was: {title}",
+    revealSub: "Press N for a new game",
+    peek: "Answer: {title}",
+    tileEntry: "Tile {n}…",
+    confirm: "Press again to confirm",
+    soundOn: "Sound on", soundOff: "Sound off",
+    musicOn: "Music on", musicOff: "Music off"
+  };
   const cfg = Object.assign({}, DEFAULTS, window.GAME_CONFIG || {});
+  const str = Object.assign({}, STRINGS, cfg.strings || {});
+  const tr = (key, vars) => str[key].replace(/\{(\w+)\}/g, (_, k) => (vars && k in vars ? vars[k] : ""));
   const $ = (id) => document.getElementById(id);
 
   const el = {
@@ -86,14 +103,19 @@
     clearTimeout(state.missTimer);
     const n = cfg.gridSize;
     const total = n * n;
+    // An odd board (5x5, 7x7) leaves the centre cell empty so the rest pair up.
+    const blank = total % 2 === 1 ? (total - 1) / 2 : -1;
+    const playable = blank >= 0 ? total - 1 : total;
+    const textMode = Array.isArray(cfg.pairs) && cfg.pairs.length > 0;
     document.documentElement.style.setProperty("--n", n);
     el.title.textContent = cfg.title;
     document.title = cfg.title;
 
     Object.assign(state, { tiles: [], open: [], missTimer: null, pairs: 0, turns: 0, streak: 0, over: false });
     state.gameId++;
-    state.totalPairs = total / 2;
+    state.totalPairs = playable / 2;
     el.banner.hidden = true;
+    el.board.classList.remove("done");
     hidePeek();
     updateStats();
     snd.stopDrumroll();
@@ -101,9 +123,10 @@
     snd.resumeMusic();
     if (firstLoad !== true) play("shuffle");
 
-    if (total % 2 !== 0) return showError(`gridSize ${n} gives ${total} tiles — it must be an even number.`);
-    if (cfg.icons.length < state.totalPairs) {
-      return showError(`Not enough icons in config.js: need ${state.totalPairs}, found ${cfg.icons.length}.`);
+    const have = textMode ? cfg.pairs.length : cfg.icons.length;
+    if (have < state.totalPairs) {
+      return showError(`Not enough ${textMode ? "pairs" : "icons"} in config.js: ` +
+                       `a ${n}×${n} board needs ${state.totalPairs}, found ${have}.`);
     }
 
     state.answer = pickAnswer();
@@ -113,27 +136,79 @@
     probe.onerror = () => showError(`Could not load answer image:<br><b>${state.answer.image}</b><br>Check the file name in config.js.`);
     probe.src = state.answer.image;
 
-    // choose icons for this game, duplicate into pairs, shuffle positions
-    const chosen = shuffle(cfg.icons.slice()).slice(0, state.totalPairs);
-    const deck = shuffle(chosen.flatMap((src) => [src, src]));
+    // Build the deck. Picture mode: two identical icons per pair.
+    // Text mode: each pair is two DIFFERENT texts that belong together; the match
+    // is decided by the pair they came from, not by what they say.
+    let deck;
+    if (textMode) {
+      const chosen = shuffle(cfg.pairs.slice()).slice(0, state.totalPairs);
+      deck = chosen.flatMap((p, k) => [{ key: "p" + k, text: String(p[0]) },
+                                       { key: "p" + k, text: String(p[1]) }]);
+    } else {
+      const chosen = shuffle(cfg.icons.slice()).slice(0, state.totalPairs);
+      deck = chosen.flatMap((src) => [{ key: src, src }, { key: src, src }]);
+    }
+    shuffle(deck);
 
     el.grid.innerHTML = "";
-    deck.forEach((src, i) => {
+    let num = 0;
+    for (let cell = 0; cell < total; cell++) {
+      if (cell === blank) {
+        const d = document.createElement("div");
+        d.className = "tile-blank";
+        d.setAttribute("aria-hidden", "true");
+        el.grid.appendChild(d);
+        continue;
+      }
+      const card = deck[num];
+      num++;
       const b = document.createElement("button");
       b.className = "tile";
       b.type = "button";
-      b.setAttribute("aria-label", `Tile ${i + 1}`);
+      b.setAttribute("aria-label", `Tile ${num}`);
       b.innerHTML =
         `<span class="tile-inner">` +
-          `<span class="face front">${i + 1}</span>` +
-          `<span class="face back"><img alt="" draggable="false"></span>` +
+          `<span class="face front">${num}</span>` +
+          `<span class="face back"></span>` +
         `</span>`;
-      b.querySelector("img").src = src;
-      const tile = { el: b, key: src, index: i, open: false, matched: false };
+      const back = b.querySelector(".back");
+      if (card.text !== undefined) fillText(back, card.text);
+      else {
+        const img = document.createElement("img");
+        img.alt = ""; img.draggable = false; img.src = card.src;
+        back.appendChild(img);
+      }
+      const tile = { el: b, key: card.key, index: num - 1, open: false, matched: false };
       b.addEventListener("click", () => flip(tile));
       el.grid.appendChild(b);
       state.tiles.push(tile);
-    });
+    }
+  }
+
+  // Lay a short phrase out as big as it fits on a card. Chinese has no spaces, so
+  // a 4-character phrase is split 2 + 2 (e.g. 加我 / 力量) rather than squeezed on one
+  // line; text with spaces wraps normally. Size is a fraction of the cell (--fs).
+  function fillText(back, text) {
+    back.classList.add("text");
+    const span = document.createElement("span");
+    span.className = "txt";
+    const chars = Array.from(text.trim());
+    let perLine, lines;
+    if (/\s/.test(text)) {
+      perLine = Math.max(4, Math.ceil(Math.sqrt(chars.length * 2)));
+      lines = Math.ceil(chars.length / perLine);
+      span.textContent = text;
+    } else {
+      perLine = chars.length <= 3 ? chars.length : chars.length === 4 ? 2 : Math.ceil(Math.sqrt(chars.length));
+      lines = Math.ceil(chars.length / perLine);
+      for (let i = 0; i < chars.length; i += perLine) {
+        if (i) span.appendChild(document.createElement("br"));
+        span.appendChild(document.createTextNode(chars.slice(i, i + perLine).join("")));
+      }
+    }
+    const fs = Math.min(0.36, 0.8 / perLine, 0.7 / (lines * 1.15));
+    back.style.setProperty("--fs", fs.toFixed(3));
+    back.appendChild(span);
   }
 
   // ---------- core rules ----------
@@ -179,7 +254,7 @@
       if (state.pairs === state.totalPairs) {
         setTimeout(() => {
           if (id !== state.gameId || state.over) return;
-          showBanner("Board cleared!", "What's the picture? Host: press C or R");
+          showBanner(tr("boardCleared"), tr("boardClearedSub"));
           play("boardCleared");
         }, cfg.clearDelayMs + 600);
       }
@@ -207,6 +282,7 @@
   function uncoverAll() {
     closeMissed();
     state.over = true;
+    el.board.classList.add("done");
     const rest = shuffle(state.tiles.filter((t) => !t.el.classList.contains("cleared")));
     rest.forEach((t, i) => setTimeout(() => {
       t.el.classList.add("matched", "cleared");
@@ -224,11 +300,12 @@
       if (id !== state.gameId) return;
       snd.pauseMusic();
       if (correct) {
-        showBanner(`Correct! It's ${title}`, `Solved with ${state.pairs} of ${state.totalPairs} pairs found in ${state.turns} turns`);
+        showBanner(tr("correct", { title }),
+                   tr("correctSub", { pairs: state.pairs, total: state.totalPairs, turns: state.turns }));
         play("fanfare");
         confetti();
       } else {
-        showBanner(`It was: ${title}`, "Press N for a new game");
+        showBanner(tr("reveal", { title }), tr("revealSub"));
         play("sadTrombone");
       }
     }, wait);
@@ -252,15 +329,15 @@
   let peekTimer = null;
   function togglePeek() {
     if (!el.peek.hidden) return hidePeek();
-    el.peek.textContent = state.answer ? `Answer: ${state.answer.title}` : "";
+    el.peek.textContent = state.answer ? tr("peek", { title: state.answer.title }) : "";
     el.peek.hidden = false;
     peekTimer = setTimeout(hidePeek, 3000);
   }
   function hidePeek() { clearTimeout(peekTimer); el.peek.hidden = true; }
 
   function updateSoundLabels() {
-    el.soundLabel.textContent = snd.sfx ? "Sound on" : "Sound off";
-    if (el.musicLabel) el.musicLabel.textContent = snd.music ? "Music on" : "Music off";
+    el.soundLabel.textContent = snd.sfx ? tr("soundOn") : tr("soundOff");
+    if (el.musicLabel) el.musicLabel.textContent = snd.music ? tr("musicOn") : tr("musicOff");
   }
   function toggleSound() { snd.setSfx(!snd.sfx); updateSoundLabels(); }
   function toggleMusic() {
@@ -295,7 +372,7 @@
     }, 2500) };
     if (action !== "new") play("drumroll");   // game-show suspense while the host confirms
     btn.classList.add("armed");
-    btn.innerHTML = btn.innerHTML.replace(/<\/kbd>.*$/, "</kbd> Press again to confirm");
+    btn.innerHTML = btn.innerHTML.replace(/<\/kbd>.*$/, "</kbd> " + tr("confirm"));
   }
 
   const actions = {
@@ -329,7 +406,7 @@
     if (/^[0-9]$/.test(k)) {
       entry += k;
       play("tick");
-      el.tileEntry.textContent = `Tile ${entry}…`;
+      el.tileEntry.textContent = tr("tileEntry", { n: entry });
       el.tileEntry.hidden = false;
       clearTimeout(entryTimer);
       // commit straight away when no further digit could make a valid tile number

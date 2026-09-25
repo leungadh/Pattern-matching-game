@@ -9,14 +9,18 @@ The audience shouts out what they think the picture is, and the host decides if 
        alt="Pattern Match mid-game: 7 of 18 pairs found, with cleared tiles revealing part of a birthday-cake picture under the numbered board">
 </p>
 
-## Two editions
+## Three editions
 
 | Edition | Folder | Contents |
 |---|---|---|
 | **Classic** | `classic/` | Everyday icons, 12 answer pictures (lighthouse, castle, volcano…) |
 | **Bible** | `bible/` | Bible symbols, 10 story pictures (Noah's Ark, the Red Sea, Daniel…) |
+| **Scripture Pairs 經文配對** | `scripture/` | 7×7 board: 48 tiles of Bible phrases in 24 pairs, empty centre cell, Chinese UI |
 
-Both run on the same engine in `engine/`, so a fix made once applies to both.
+All run on the same engine in `engine/`, so a fix made once applies to every edition.
+
+In **Scripture Pairs** the two halves of a pair are different words that belong
+together — 真理 matches 束腰帶子, 標竿 matches 直跑 — so the room has to know the verse.
 
 ## Run it (Windows or Mac)
 
@@ -79,6 +83,18 @@ const ANSWERS = [
 If there are more than 18, each game picks 18 at random.
 
 **Board size:** set `gridSize` (4 = 16 tiles, 6 = 36 tiles, 8 = 64 tiles). You need at least (gridSize²)/2 icons.
+An odd size (5, 7) leaves the centre cell empty, so 7 = 48 tiles = 24 pairs.
+
+**Text pairs instead of pictures:** list them as `pairs` in `config.js` (see `scripture/config.js`).
+The easiest way is to keep them in a spreadsheet saved as *CSV UTF-8* with the columns
+`number, left text, right text`, then run:
+
+```
+python3 tools/csv_to_pairs.py scripture/pairs.csv scripture/config.js
+```
+
+**On-screen text:** every message the game writes (banners, "Press again to confirm"…) can be
+translated under `strings` in `config.js` — see `scripture/config.js` for the Chinese set.
 
 **Chinese titles:** put the Chinese text in the `title` field, never in the file name.
 File names must stay lowercase ASCII — Chinese file names break on Windows and in URLs.
@@ -106,7 +122,14 @@ bible/                Bible edition — same shape
   icons/
   answers/
 
+scripture/            Scripture Pairs edition — text tiles, no icons
+  index.html
+  config.js           PAIRS (generated from pairs.csv), answers, Chinese strings
+  pairs.csv           the 24 phrase pairs — edit this, then run tools/csv_to_pairs.py
+  answers/
+
 assets/hero.png       screenshot used by this README
+tools/csv_to_pairs.py       copies pairs.csv into config.js        (needs Python)
 tools/make_icons.py         re-generates classic/icons/        (optional, needs Python)
 tools/make_answers.py       re-generates classic/answers/      (optional, needs Python)
 tools/make_bible_icons.py   re-generates bible/icons/          (optional, needs Python)
