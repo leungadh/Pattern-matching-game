@@ -12,7 +12,8 @@
   const DEFAULTS = {
     title: "Pattern Match", gridSize: 6, icons: [], pairs: [], answers: [],
     flipBackDelayMs: 1200, clearDelayMs: 700, sound: true, music: false, volume: 0.8,
-    revealText: true     // false = end the round on the picture alone, no answer banner
+    revealText: true,    // false = end the round on the picture alone, no answer banner
+    centerSymbol: ""     // odd boards: a symbol for the empty centre cell, e.g. "★"
   };
   // Every piece of text the engine writes on screen. An edition can override any of
   // them in config.js under `strings` (e.g. Chinese), so the engine stays language-free.
@@ -158,6 +159,12 @@
         const d = document.createElement("div");
         d.className = "tile-blank";
         d.setAttribute("aria-hidden", "true");
+        if (cfg.centerSymbol) {
+          const sym = document.createElement("span");
+          sym.className = "blank-symbol";
+          sym.textContent = cfg.centerSymbol;
+          d.appendChild(sym);
+        }
         el.grid.appendChild(d);
         continue;
       }

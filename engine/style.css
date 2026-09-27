@@ -148,6 +148,21 @@ body {
 }
 .board.done .tile-blank { background-color: transparent; }
 
+/* optional centre symbol (config centerSymbol), e.g. a gold star */
+.tile-blank {
+  display: flex; align-items: center; justify-content: center;
+}
+.blank-symbol {
+  color: #f5c542;
+  font-size: calc(var(--size) / var(--n) * .62);
+  line-height: 1;
+  text-shadow: 0 0 .25em rgba(245, 197, 66, .55);
+  font-family: "Segoe UI Symbol", "Apple Symbols", "Segoe UI", sans-serif;
+  transition: opacity .5s ease;
+  user-select: none;
+}
+.board.done .blank-symbol { opacity: 0; }
+
 .tile.matched .back { box-shadow: inset 0 0 0 5px var(--accent); }
 .tile.miss .back   { box-shadow: inset 0 0 0 5px var(--danger); animation: shake .35s; }
 

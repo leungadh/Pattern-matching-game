@@ -84,6 +84,9 @@ window.GAME_CONFIG = {
   // The title above is still what the host sees on peek (P).
   revealText: false,
 
+  // The empty centre cell of the 7 x 7 board shows this symbol (use "" for a plain cell).
+  centerSymbol: "★",
+
   // Everything the game writes on screen. {placeholders} are filled in by the engine.
   strings: {
     boardCleared: "全部配對完成！",
